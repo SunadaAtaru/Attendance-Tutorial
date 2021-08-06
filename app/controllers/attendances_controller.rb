@@ -32,6 +32,10 @@ class AttendancesController < ApplicationController
   def update_one_month
     ActiveRecord::Base.transaction do # トランザクションを開始します。
       attendances_params.each do |id, item|
+        if item[:started_at].present? && item[:finished_at].blank?
+          flash[:danger] = "無効なデータがあった為、更新をキャンセルしました。"
+          redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
+        end
         attendance = Attendance.find(id)
         attendance.update_attributes!(item)
       end

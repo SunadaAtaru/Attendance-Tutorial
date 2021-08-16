@@ -15,9 +15,9 @@
         <th></th>
       </tr>
     </thead>
-     <%= form_tag(users_path, :method => "get") do %>
+     <%= form_tag(users_path, :method => "get", enforce_utf8: false) do %>
     <%= text_field_tag :search %> 
-   <%= submit_tag "Search" ,:name => nil ,class: "button is-info"%> 
+   <%= submit_tag "検索" ,:name => nil ,class: "button is-info"%> 
 <% end %> 
 
 

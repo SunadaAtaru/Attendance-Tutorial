@@ -1,9 +1,9 @@
-<% provide(:title, 'All Users') %>
-<h1>ユーザー一覧</h1>
-
-<div class="col-md-10 col-md-offset-1">
-  <%= will_paginate %>
-  <table class="table table-condensed table-hover" id="table-users">
+<h1>検索結果</h1>
+<%= form_with url: search_users_path, method: :get, local: true do |f| %>
+  <%= f.text_field :name %>
+  <%= f.submit :search %>
+<% end %>
+<table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>
         <th><%= User.human_attribute_name :name %></th>
@@ -15,13 +15,7 @@
         <th></th>
       </tr>
     </thead>
-     <%= form_tag(search_users_path, :method => "get", enforce_utf8: false) do %>
-    <%= text_field_tag :search %> 
-   <%= submit_tag "検索" ,:name => nil ,class: "button is-info"%> 
-<% end %> 
-
-
-    <% @users.each do |user| %>
+     <% @users.each do |user| %>
       <tr>
         <td>
           <% if current_user.admin? %>
@@ -44,9 +38,5 @@
         </td>
       </tr>
     <% end %>
-  </table>
-  <%= will_paginate %>
-</div>
-
-<!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+  </tbody>
+</table>

@@ -3,9 +3,10 @@
 
 <div class="col-md-10 col-md-offset-1">
   <%= will_paginate %>
-   <%= form_tag(users_path, :method => "get", enforce_utf8: false) do %>
-  <%= text_field_tag :search %> 
-  <%= submit_tag "検索" ,:name => nil ,class: "button is-info"%> 
+   <%= form_with url: search_users_path, method: :get, local: true do |f| %>
+     <%  f.label :search, '検索' %>
+     <%= f.text_field :search, class: "form-control mr-sm-2", placeholder: 'item_name' %>
+     <%= f.submit '検索', class: "btn btn-outline-success my-2 my-sm-0" %>
   <table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>

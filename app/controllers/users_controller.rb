@@ -9,16 +9,19 @@ class UsersController < ApplicationController
   
   
 
-
-  def index
-    @users = User.paginate(page: params[:page], per_page: 20).search(params[:search])
-  end
+def index
+    #条件分岐
+    @users = if params[:search]
+      #searchされた場合は、原文+.where('name LIKE ?', "%#{params[:search]}%")を実行
+      User.where(activated: true).paginate(page: params[:page]).where('name LIKE ?', "%#{params[:search]}%")
+    else
+      #searchされていない場合は、原文そのまま
+      User.where(activated: true).paginate(page: params[:page])
+    end
+end
 
   
-  def search
-    @users = User.paginate(page: params[:page], per_page: 20).search(params[:search])
-  end
-
+ 
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
   end

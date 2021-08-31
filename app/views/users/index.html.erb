@@ -2,10 +2,19 @@
 <h1>ユーザー一覧</h1>
 
 <div class="col-md-10 col-md-offset-1">
-  <%= will_paginate %>
-   <%= form_tag(users_path, :method => "get", enforce_utf8: false) do %>
-  <%= text_field_tag :search %> 
-  <%= submit_tag "検索" ,:name => nil ,class: "button is-info"%> 
+ <%= will_paginate(@users) %>
+
+ <p>user search</p>
+ <%= form_with(url:users_path, :method => 'get',local: true) do |form|  %>
+   <%= form.label :ユーザー検索 %>
+   <%= form.text_field :search,class:'form-control' %>
+   <%= form.submit '検索' , class: "btn btn-primary" %>
+
+<ul class="users">
+  <%= render @users %>
+</ul>
+
+ <%= will_paginate %>
   <table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>

@@ -30,29 +30,16 @@
         <th rowspan="2">日付</th>
         <th rowspan="2">曜日</th>
         <th rowspan="2">勤怠登録</th>
-        <th>出社</th>
-         <th>時間</th>
-         <th>退社</th>
-         <th>時間</th>
-          
-        
-        
+        <th colspan="2">出社</th>
+        <th colspan="2">退社</th>
         <th rowspan="2">在社時間</th>
         <th rowspan="2">備考</th>
-      </tr>
-       <tr>
-        
-        
-        
-        <th>出社</th>
-         <th>時間</th>
-          
-        <th>退社</th>
-         <th>時間</th>
-        
-       
-        
-      </tr>
+      </tr> 
+        <th>時</th>
+        <th>分</th>
+        <th>時</th>
+        <th>分</th>
+       </tr>
     </thead>
 
     <tbody>
@@ -61,9 +48,7 @@
           <td><%= l(day.worked_on, format: :short) %></td>
           <td class='<%= "wday#{day.worked_on.wday}"%>'> 
           <%= $days_of_the_week[day.worked_on.wday] %></td>
-     
-          
-          <td> 
+          <td>
             <% if btn_text = attendance_state(day) %>
               <%= link_to "#{btn_text}登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
             <% end %>
@@ -71,13 +56,12 @@
           <td><%= day.started_at.hour if day.started_at.present? %></td>
           <td><%= format_min(day.started_at) if day.started_at.present? %></td>
           
+          
           <td><%= day.finished_at.hour if day.finished_at.present? %></td>
           <td><%= format_min(day.finished_at) if day.finished_at.present? %></td>
-        
-          
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at, day.finished_at) %>
+              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
                <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>

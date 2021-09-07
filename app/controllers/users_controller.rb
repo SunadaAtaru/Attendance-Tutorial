@@ -11,15 +11,8 @@ class UsersController < ApplicationController
 
 def index
     #条件分岐
-    @users = if params[:search]
-      #searchされた場合は、原文+.where('name LIKE ?', "%#{params[:search]}%")を実行
-      User.where(activated: true).paginate(page: params[:page]).where('name LIKE ?', "%#{params[:search]}%")
-    else
-      #searchされていない場合は、原文そのまま
-      User.where(activated: true).paginate(page: params[:page])
-    end
+    @users = User.paginate(page: params[:page],per_page: 5 ).search(params[:search])
 end
-
   
  
   def show

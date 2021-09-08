@@ -35,7 +35,7 @@ class User < ApplicationRecord
     if search
       where(['name LIKE ?',"%#{search}%"]) #検索とuseanameの部分一致を表示。
     else
-      all #全て表示させる
+      all #User.name全て表示させる
     end
   end
   

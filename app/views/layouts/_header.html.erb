@@ -7,6 +7,8 @@
         <% if logged_in? %>
           <% if current_user.admin? %>
           <li><%= link_to "全てのユーザー", users_path %></li>
+          
+          
           <% else %>
           <% end %>
           <li class="dropdown">

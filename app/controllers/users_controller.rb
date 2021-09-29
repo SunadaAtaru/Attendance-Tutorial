@@ -9,10 +9,16 @@ class UsersController < ApplicationController
   
   
 
-def index
-    #条件分岐
-    @users = User.paginate(page: params[:page],per_page: 5 ).search(params[:search])
-end
+  def index
+      #条件分岐
+      @users = User.paginate(page: params[:page],per_page: 5 ).search(params[:search])
+  end
+  
+  def import
+    User.import(params[:file])
+    redirect_to root_url
+    
+  end  
   
  
   def show
@@ -59,7 +65,14 @@ end
  
 
   def edit_basic_info
+    
   end
+  
+  def working 
+    # ユーザーモデルから全てのユーザーに紐づいた勤怠たちを代入
+    @users = User.all.includes(:attendances)
+  end 
+
 
   def update_basic_info
     if @user.update_attributes(basic_info_params)

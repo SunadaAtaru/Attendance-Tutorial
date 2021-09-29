@@ -1,6 +1,7 @@
 class BasesController < ApplicationController
-  before_action :admin_user, only [:new, :create, :edit, :update, :index, :show, :destroy]
-  before_action :set_base, only [:edit, :update, :destroy]
+  
+  before_action :admin_user, only: [:new, :create, :edit, :update, :index, :show, :destroy]
+  before_action :set_base, only: [:edit, :update, :destroy]
   
 
   def new
@@ -12,8 +13,8 @@ class BasesController < ApplicationController
     if @base.save
       flash[:sucsess] = "拠点情報を作成しました。"
       redirect_to bases_url
-    else
-      flash[:danger] = "拠点情報の作成に失敗しました。" @base.errors.full_messages.join("<br>")
+    else 
+      flash[:danger] = "拠点情報の作成に失敗しました。" + @base.errors.full_messages.join("<br>")
       redirect_to bases_url
     end
   end
@@ -27,6 +28,8 @@ class BasesController < ApplicationController
       redirect_to bases_url
     else
       flash[:danger] = "拠点情報の更新に失敗しました。" + @base.errors.full_messages.join("<br>")
+    end
+  end    
   
   def show
   end

@@ -9,25 +9,28 @@ class BasesController < ApplicationController
   end
   
   def create
-    @base = Base.new
+    @base = Base.new(base_params)
     if @base.save
       flash[:sucsess] = "拠点情報を作成しました。"
       redirect_to bases_url
     else 
-      flash[:danger] = "拠点情報の作成に失敗しました。" + @base.errors.full_messages.join("<br>")
+      flash[:danger] = "拠点情報の作成に失敗しました。<br>" + @base.errors.full_messages.join("<br>")
       redirect_to bases_url
     end
   end
   
   def edit
+    @base = Base.find(params[:id])
   end
   
   def update
+    @base = Base.find(params[:id])
     if @base.update_attributes(base_params)
       flash[:success] = "拠点情報を更新しました。"
       redirect_to bases_url
     else
-      flash[:danger] = "拠点情報の更新に失敗しました。" + @base.errors.full_messages.join("<br>")
+      flash[:danger] = "拠点情報の更新に失敗しました。<br>" + @base.errors.full_messages.join("<br>")
+      redirect_to bases_url
     end
   end    
   

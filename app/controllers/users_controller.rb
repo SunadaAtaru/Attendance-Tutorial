@@ -10,8 +10,7 @@ class UsersController < ApplicationController
   
 
   def index
-      #条件分岐
-      @users = User.paginate(page: params[:page],per_page: 5 ).search(params[:search])
+     @users = User.where.not(id: 1).paginate(page: params[:page],per_page: 5 ).search(params[:search])
   end
   
   def import
@@ -90,6 +89,6 @@ class UsersController < ApplicationController
     end
 
     def basic_info_params
-      params.require(:user).permit(:department, :basic_time, :work_time)
+      params.require(:user).permit(:department, :basic_work_time)
     end
 end

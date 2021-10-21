@@ -20,11 +20,11 @@ class BasesController < ApplicationController
   end
   
   def edit
-    @base = Base.find(params[:id])
+    # @base = Base.find(params[:id])
   end
   
   def update
-    @base = Base.find(params[:id])
+    # @base = Base.find(params[:id])
     if @base.update_attributes(base_params)
       flash[:success] = "拠点情報を更新しました。"
       redirect_to bases_url
@@ -53,11 +53,11 @@ class BasesController < ApplicationController
   
   private
     def set_base
-      @base = Base.find(params{:id})
+      @base = Base.find(params[:id])
     end
     
     def base_params
-      params.require(:base).permit(:base_number,:base_name,:infomation)
+      params.require(:base).permit(:base_number,:base_name,:information)
     end
    
    

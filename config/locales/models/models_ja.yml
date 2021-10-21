@@ -14,3 +14,7 @@ ja:
           password_confirmation: パスワード再入力
           created_at: 作成日
           updated_at: 更新日
+        base:
+          base_number: 拠点番号
+          base_name: 拠点名
+          information: 拠点種類

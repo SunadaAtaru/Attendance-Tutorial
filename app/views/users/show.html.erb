@@ -22,6 +22,9 @@
 <div class="btn-users-show col-md-5" >
   
   <%= link_to "1ヶ月の勤怠編集へ", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
+  <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class: "btn btn-primary" %> &nbsp;
+  <%= link_to "CSV出力",user_path(format: 'csv'),class: "btn btn-primary" %><br>
+  <%= link_to "勤怠修正ログ（承認済）",log_user_attendance_path(@user, @attendance),class: "btn btn-primary" %>
   
 </div>
 

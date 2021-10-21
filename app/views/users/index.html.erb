@@ -17,17 +17,7 @@
 </div>
 <div class="col-md-10 col-md-offset-1">
   <%= will_paginate %>
-  <table class="table table-condensed table-hover" id="table-users">
-    <thead>
-      <tr>
-        <th><%= User.human_attribute_name :name %></th>
-        <th class="center"><%= User.human_attribute_name :department %></th>
-        <% if current_user.admin? %>
-          <th class="center"><%= User.human_attribute_name :basic_work_time %></th>
-        <% end %>
-        <th></th>
-      </tr>
-    </thead>
+  
     
     <div class="csv">
       <%= form_tag import_users_path,multipart: true do |f|%>
@@ -37,30 +27,22 @@
     </div>  
   
     <% @users.each do |user| %>
-      <tr>
-        <td>
-          <% if current_user.admin? %>
-            <%= link_to user.name, user %>
-          <% else %>
-            <%= user.name %>
-          <% end %>
-        </td>
-        <td class="center"><%= user.department.present? ? user.department : "未所属" %></td>
-        <% if current_user.admin? %>
-          <td class="center"><%= format_basic_info(user.basic_work_time) %></td>
-        <% end %>
-        <td class="center">
-          <% if current_user.admin? && !current_user?(user) %>
-            <%= link_to "基本情報編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-success" %>
-            <%= link_to "削除", user, method: :delete,
-                data: { confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
-          <% end %>
-        </td>
-      </tr>
+    <p>
+      <%= user.name %><br>
+        |&nbsp<%= link_to "削除", user, method: :delete,data: { confirm: "#{user.name}を削除してよろしいですか？" },
+        class: "btn btn-primary btn-default" %><br>
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <button type="button" data-toggle="collapse" href="#collapse<%= user.id %>" 
+                class="btn btn-primary">編集</button>
+              </h4>
+            </div>
+              <div id="collapse<%= user.id %>" class="panel-collapse collapse">
+                <div class="panel-body"><%= render 'form2', user: user %></div>
+            </div>
+          </div>
+        </div>
+      </p>
     <% end %>
-  </table>
-  <%= will_paginate %>
-</div>
-
-<!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

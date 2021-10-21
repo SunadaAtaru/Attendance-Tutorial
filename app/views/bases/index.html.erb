@@ -16,10 +16,10 @@
      <tr class= "active">
        <div class="base-index">
         <td><%= link_to "修正",edit_basis_path(base), remote: true, class: "btn btn-primary" %></td>
-        <td><%= link_to "削除",base ,method: :delete, data: { confirm: "#{base.name}を削除してもよろしいですか?" } ,class: "btn btn-primary" %></td> 
-        <td><%= base.number %></td>
-        <td><%= base.name %></td>
-        <td><%= base.infomation %></td>
+        <td><%= link_to "削除",base ,method: :delete, data: { confirm: "#{base.base_name}を削除してもよろしいですか?" } ,class: "btn btn-primary" %></td> 
+        <td><%= base.base_number %></td>
+        <td><%= base.base_name %></td>
+        <td><%= base.information %></td>
        </div>
      </tr>
     <% end %>

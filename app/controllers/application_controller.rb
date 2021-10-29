@@ -20,14 +20,27 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # アクセスしたユーザーが現在ログインしているユーザーか確認します。
   def correct_user
-    redirect_to(root_url) unless current_user?(@user)
-  end
+    @user = User.find(params[:id])
+    unless current_user?(@user)
+      flash[:danger] = "他者のページは閲覧できません"
+      redirect_to(root_url) 
+    end
+  end 
 
-  # システム管理権限所有かどうか判定します。
+  def correct_user_b
+    @user = User.find(params[:user_id])
+    unless current_user?(@user)
+      flash[:danger] = "他者のページは閲覧できません"
+      redirect_to(root_url) 
+    end
+  end 
+
   def admin_user
-    redirect_to root_url unless current_user.admin?
+    unless current_user.admin?
+      flash[:danger] = "ページ遷移の権限がありません"
+    redirect_to root_url 
+    end
   end
   
   def admin_not
@@ -36,6 +49,14 @@ class ApplicationController < ActionController::Base
     redirect_to root_url 
     end
   end
+  
+  def correct_not
+    unless current_user == @user
+      flash[:danger] = "他者のページは閲覧できません"
+    redirect_to root_url 
+    end
+  end
+
 
 
   # ページ出力前に1ヶ月分のデータの存在を確認・セットします。

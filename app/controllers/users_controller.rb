@@ -3,13 +3,26 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :correct_user, only: [:edit, :update, :show]
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :set_one_month, only: :show
-  before_action :admin_not, only: :show
+  before_action :set_one_month, only: [:show]
+  before_action :admin_not, only: [:show]
   
   
+   def show
+    @worked_sum = @attendances.where.not(started_at: nil).count
+    @overtime = Attendance.where(indicater_reply: "申請中", indicater_check: @user.name).count
+    @change = Attendance.where(indicater_reply_edit: "申請中", indicater_check_edit: @user.name).count
+    @month = Attendance.where(indicater_reply_month: "申請中", indicater_check_month: @user.name).count
+    @superior = User.where(superior: true).where.not( id: current_user.id  )
+    @attendance = @user.attendances.find_by(worked_on: @first_day)
+    # csv 出力
+    respond_to do |format|
+      format.html 
+      filename = @user.name + ":" + l(@first_day, format: :middle) + "分" + " " + "勤怠"
+      format.csv { send_data render_to_string, type: 'text/csv; charset=shift_jis', filename: "#{filename}.csv" }  
+    end    
+  end
   
   
-
   def index
       @users = User.where.not(id: 1).paginate(page: params[:page],per_page: 5 ).search(params[:search])
       respond_to do |format|
@@ -24,20 +37,29 @@ class UsersController < ApplicationController
   
   
   def import
-    User.import(params[:file])
+    if params[:file].blank?
+      flash[:danger]= "csvファイルを選択して下さい"
+      redirect_to users_url
+    elsif
+      File.extname(params[:file].original_filename) != ".csv"
+      flash[:danger]= "csvファイル以外は出力できません"
+      redirect_to users_url
+    else
+      User.import(params[:file])
+      flash[:success]= "インポートが完了しました"
+      redirect_to users_url
+    end 
+   
+   rescue ActiveRecord::RecordInvalid
+    flash[:danger]= "不正なファイルのため、インポートに失敗しました"
     redirect_to users_url
-    
-  end  
+  rescue ActiveRecord::RecordNotUnique
+    flash[:danger]= "既にインポート済です"
+    redirect_to users_url
+  end
   
  
-  def show
-    @worked_sum = @attendances.where.not(started_at: nil).count
-    @overtime = Attendance.where(indicater_reply: "申請中", indicater_check: @user.name).count
-    @change = Attendance.where(indicater_reply_edit: "申請中", indicater_check_edit: @user.name).count
-    @month = Attendance.where(indicater_reply_month: "申請中", indicater_check_month: @user.name).count
-    @superior = Attendance.where(superior: true).where.not( id: current_user.id  )
-    @attendance = @user.attendances.find_by(worked_on: @first_day)
-  end
+  
 
   def new
     @user = User.new
@@ -103,7 +125,4 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
     end
 
-    def basic_info_params
-      params.require(:user).permit(:department, :basic_work_time)
-    end
 end

@@ -21,11 +21,15 @@ Rails.application.routes.draw do
       patch 'update_index'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
+      get 'attendances/edit_month_approval'
+      patch 'attendances/update_month_approval'
+      # 確認のshowページ
+      get 'verifacation'
     end
     collection do
       get 'working'
     end
-    resources :attendances, only: :update
+    resources :attendances, only: [:update] do
      member do
         # 残業申請モーダル
         get 'edit_overtime_request'
@@ -43,6 +47,10 @@ Rails.application.routes.draw do
       patch 'update_month_approval_notice'
       # 勤怠ログ
       get 'log'
-      end
+     end
     end 
+  end
+  get '*not_found', to: 'application#routing_error'
+  post '*not_found', to: 'application#routing_error'
 end
+

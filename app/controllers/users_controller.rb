@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   before_action :admin_not, only: [:show]
   
   
-   def show
+  def show
     @worked_sum = @attendances.where.not(started_at: nil).count
     @overtime = Attendance.where(indicater_reply: "申請中", indicater_check: @user.name).count
     @change = Attendance.where(indicater_reply_edit: "申請中", indicater_check_edit: @user.name).count
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
       redirect_to users_url
     end 
    
-   rescue ActiveRecord::RecordInvalid
+  rescue ActiveRecord::RecordInvalid
     flash[:danger]= "不正なファイルのため、インポートに失敗しました"
     redirect_to users_url
   rescue ActiveRecord::RecordNotUnique
@@ -108,6 +108,18 @@ class UsersController < ApplicationController
     # ユーザーモデルから全てのユーザーに紐づいた勤怠たちを代入
     @users = User.all.includes(:attendances)
   end 
+  
+  def verifacation
+    @user = User.find(params[:id])
+    # お知らせモーダルの確認ボタンを押した時にparams[：worked_on]にday.worked_onを入れて飛ばしたので、それをfind_byで取り出している
+    @attendance = Attendance.find_by(worked_on: params[:worked_on])
+    @first_day = @attendance.worked_on.beginning_of_month
+    @last_day = @first_day.end_of_month
+    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    @worked_sum = @attendances.where.not(started_at: nil).count
+  end  
+
+  
 
 
   def update_basic_info

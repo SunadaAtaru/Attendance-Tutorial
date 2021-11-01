@@ -80,4 +80,20 @@ class ApplicationController < ActionController::Base
     flash[:danger] = "ページ情報の取得に失敗しました、再アクセスしてください。"
     redirect_to root_url
   end
+  
+  unless Rails.env.production?
+    rescue_from ActiveRecord::RecordNotFound,   with: :render_404
+    rescue_from ActionController::RoutingError, with: :render_404
+  end
+ 
+  def routing_error
+    raise ActionController::RoutingError, params[:path]
+  end
+ 
+  private
+ 
+  def render_404
+    render 'shared/404', status: :not_found
+  end
 end
+

@@ -4,7 +4,7 @@ class AttendancesController < ApplicationController
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_user, only: [:index,:destroy, :edit_basic_info]
   #before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: :edit_one_month
+  before_action :set_one_month, only: [:edit_one_month]
   before_action :admin_not
   before_action :correct_not, only: [:show, :edit_one_month]
   before_action :correct_user_b, only: [:log]
@@ -214,7 +214,7 @@ class AttendancesController < ApplicationController
               item[:finished_before_at] = attendance.finished_at
             end 
             item[:finished_at] = attendance.finished_edit_at
-            item[:indicater_check_edit] = nil
+           #item[:indicater_check_edit] = nil
             e2 += 1          
             attendance.indicater_check_anser = "勤怠変更申請を承認しました"
           elsif item[:indicater_reply_edit] == "否認"

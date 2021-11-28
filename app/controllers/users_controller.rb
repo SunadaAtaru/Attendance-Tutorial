@@ -4,8 +4,8 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:show, :update, :update_index, :destroy, :edit_basic_info,:overtime_request]
   before_action :correct_user, only: [ :edit,:update]
   before_action :set_one_month, only: [:show]
-  before_action :admin_user, only: [:destroy, :edit_basic_info, :index, :working]
-  #before_action :admin_not, only: [:show]
+  before_action :admin_user, only: [:destroy, :edit_basic_info, :index, :working,]
+  before_action :admin_not, only: [:show]
   before_action :correct_not, only: [:show]
 
   
@@ -61,7 +61,15 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
- 
+  def update_index
+    if @user.update_attributes(user_params)
+      flash[:success] = "ユーザー情報を更新しました。"
+      redirect_to users_url
+    else
+      flash[:danger] = "更新に失敗しました。"
+      redirect_to users_url
+    end 
+  end 
   
 
   def new

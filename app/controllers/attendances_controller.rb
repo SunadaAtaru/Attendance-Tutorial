@@ -2,7 +2,7 @@ class AttendancesController < ApplicationController
   
   before_action :set_user, only: [:edit_one_month, :update_one_month,:update_month_approval, :edit_overtime_notice, :edit_one_month_notice, :edit_month_approval_notice]
   before_action :logged_in_user, only: [:update, :edit_one_month]
-  before_action :admin_user, only: [:index,:destroy, :edit_basic_info]
+  before_action :admin_user, only: [:index,:destroy, :edit_basic_info, :verifacation]
   #before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month]
   before_action :admin_not
@@ -184,9 +184,9 @@ class AttendancesController < ApplicationController
   end  
   
   # 1ヶ月分の勤怠情報を扱います。
-    def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
-    end
+   #def attendances_params
+      #params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+   #end
     
    def update_one_month_notice
     ActiveRecord::Base.transaction do 

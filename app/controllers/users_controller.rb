@@ -2,11 +2,11 @@ class UsersController < ApplicationController
   
   before_action :set_user, only: [:show, :edit, :update, :update_index, :edit_basic_info, :destroy,:overtime_request]
   before_action :logged_in_user, only: [:show, :update, :update_index, :destroy, :edit_basic_info,:overtime_request]
-  before_action :correct_user, only: [ :edit,:update]
+  before_action :correct_user, only: [:edit,:update]
   before_action :set_one_month, only: [:show]
-  before_action :admin_user, only: [:destroy, :edit_basic_info, :index, :working,]
-  before_action :admin_not, only: [:show]
-  before_action :correct_not, only: [:show]
+  before_action :admin_user, only: [:destroy, :edit_basic_info, :index, :working]
+  before_action :admin_not, only: [:show,:verifacation]
+  before_action :correct_not, only: [:show,:verifacation]
 
   
   
@@ -117,7 +117,7 @@ class UsersController < ApplicationController
   
   def working 
     # ユーザーモデルから全てのユーザーに紐づいた勤怠たちを代入
-    @users = User.all.includes(:attendances)
+    @users = User.all.includes(:attendances).where.not(id: 1)
   end 
   
   def verifacation
@@ -145,7 +145,8 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :affiliation,:employee_number,:uid, :password, 
+        :password_confirmation, :basic_work_time, :designated_work_start_time, :designated_work_end_time)
     end
 
 end

@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :set_one_month, only: [:show]
   before_action :admin_user, only: [:destroy, :edit_basic_info, :index, :working]
   before_action :admin_not, only: [:show,:verifacation]
-  before_action :correct_not, only: [:show,:verifacation]
+  before_action :correct_not, only: [:show]
 
   
   
